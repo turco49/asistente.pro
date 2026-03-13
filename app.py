@@ -1,5 +1,5 @@
 import streamlit as st
-import ollama
+from groq import Groq
 
 # Configuración del producto
 PRODUCTO = {
@@ -36,4 +36,5 @@ if prompt := st.chat_input("Pregúntame sobre el curso..."):
         full_response = response['message']['content']
         st.markdown(full_response)
     
+
     st.session_state.messages.append({"role": "assistant", "content": full_response})
