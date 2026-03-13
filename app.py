@@ -46,8 +46,9 @@ if prompt := st.chat_input("Pregúntame sobre el curso..."):
             # Combinamos sistema + historial
             historial_completo = [mensaje_sistema] + st.session_state.messages
 
+            # CAMBIO AQUÍ: Usamos el modelo actualizado
             completion = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.3-70b-versatile",
                 messages=historial_completo,
             )
             
