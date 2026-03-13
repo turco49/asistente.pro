@@ -3,20 +3,13 @@ from groq import Groq
 
 # 1. Configuración de seguridad
 if "GROQ_API_KEY" not in st.secrets:
-    st.error("⚠️ Falta la configuración de GROQ_API_KEY en los Secrets.")
+    st.error("⚠️ Configura la GROQ_API_KEY en los Secrets de Streamlit.")
     st.stop()
 
 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
 
-# Configuración del producto
-PRODUCTO = {
-    "nombre": "Cocinero Pro en 30 Días",
-    "precio": "47 USD",
-    "beneficios": "Certificado oficial, acceso de por vida, garantía de 7 días.",
-    "link": "https://hotmart.com/tu-link-aqui"
-}
-
-st.set_page_config(page_title="Asistente Pro", page_icon="👨‍🍳")
+# Configuración de la página (Cambié el ícono a un rayo para que sea general)
+st.set_page_config(page_title="Asistente Pro", page_icon="⚡")
 st.title("🤖 asistente.pro")
 
 # Inicializar historial
@@ -29,7 +22,7 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # Entrada de usuario
-if prompt := st.chat_input("Pregúntame sobre el curso..."):
+if prompt := st.chat_input("¿En qué puedo ayudarte hoy?"):
     # Guardar mensaje del usuario
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -37,16 +30,23 @@ if prompt := st.chat_input("Pregúntame sobre el curso..."):
 
     with st.chat_message("assistant"):
         try:
-            # Construimos la lista de mensajes correctamente
+            # INSTRUCCIONES GENERALES (Ya no es solo de cocina)
             mensaje_sistema = {
                 "role": "system", 
-                "content": f"Eres un experto vendedor. Producto: {PRODUCTO['nombre']}. Precio: {PRODUCTO['precio']}. Link: {PRODUCTO['link']}. Responde breve y profesional."
+                "content": """
+                Eres 'asistente.pro', un asistente virtual inteligente y experto en múltiples áreas.
+                REGLAS:
+                1. Puedes ayudar con programación, redacción, historia, ciencia, consejos y charlas generales.
+                2. Responde siempre en español, de forma clara, educada y profesional.
+                3. Si el usuario te pide ayuda creativa o técnica, sé detallado.
+                4. Tu objetivo es ser el asistente más útil posible para el usuario.
+                """
             }
             
             # Combinamos sistema + historial
             historial_completo = [mensaje_sistema] + st.session_state.messages
 
-            # CAMBIO AQUÍ: Usamos el modelo actualizado
+            # Llamada al modelo potente de Groq
             completion = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=historial_completo,
