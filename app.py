@@ -9,8 +9,7 @@ PRODUCTO = {
     "link": "https://hotmart.com/tu-link-aqui"
 }
 
-st.title("🤖 asistente.pro
-")
+st.title("🤖 asistente.pro")
 
 # Inicializar historial
 if "messages" not in st.session_state:
@@ -39,4 +38,5 @@ if prompt := st.chat_input("Pregúntame sobre el curso..."):
     
 
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+
 
